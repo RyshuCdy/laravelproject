@@ -20,13 +20,15 @@ steps:
     args: ['push', 'gcr.io/laravelproject-390508/my-laravel-app']
 
   # Deploy the app to Cloud Run
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'bash'
+  - name: 'gcr.io/cloud-builders/gcloud'
     args:
-      - '-c'
-      - |
-        gcloud run deploy my-laravel-app \
-        --image=gcr.io/laravelproject-390508/my-laravel-app \
-        --platform=managed \
-        --region=us-central1 \
-        --allow-unauthenticated
+      - 'run'
+      - 'deploy'
+      - 'my-laravel-app'
+      - '--image'
+      - 'gcr.io/laravelproject-390508/my-laravel-app'
+      - '--platform'
+      - 'managed'
+      - '--region'
+      - 'us-central1'
+      - '--allow-unauthenticated'
