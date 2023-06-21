@@ -7,20 +7,6 @@ steps:
   - name: 'gcr.io/cloud-builders/npm'
     args: ['run', 'production']
 
-  # Install zip and unzip
-  - name: 'gcr.io/cloud-builders/apt'
-    args: ['update']
-  - name: 'gcr.io/cloud-builders/apt'
-    args: ['install', '-y', 'zip', 'unzip']
-
-  # Install Git
-  - name: 'gcr.io/cloud-builders/git'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-          apt-get update && apt-get install -y git
-
   # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/laravelproject-390508/my-laravel-app', '.']
@@ -29,8 +15,8 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/laravelproject-390508/my-laravel-app']
 
-  # Deploy the app to Google App Engine
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    args: ['app', 'deploy', '--version', 'v1', '--image-url', 'gcr.io/laravelproject-390508/my-laravel-app']
+  # Deploy the app to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['run', 'deploy', 'my-laravel-app', '--image', 'gcr.io/laravelproject-390508/my-laravel-app', '--platform', 'managed', '--region', 'us-central1', '--allow-unauthenticated']
     env:
-      - 'CLOUDSDK_CORE_PROJECT=laravelproject-390508'
+      - 'PROJECT_ID=laravelproject-390508'
