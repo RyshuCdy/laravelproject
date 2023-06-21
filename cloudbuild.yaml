@@ -1,0 +1,38 @@
+steps:
+  # Install dependencies and build the Laravel app
+  - name: 'gcr.io/cloud-builders/composer'
+    args: ['install', '--ignore-platform-reqs']
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'production']
+
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/laravelproject-390508/my-laravel-app', '.']
+
+  # Push the Docker image to Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/laravelproject-390508/my-laravel-app']
+
+  # Deploy the app to Google App Engine
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args: ['app', 'deploy', '--version', 'v1', '--image-url', 'gcr.io/laravelproject-390508/my-laravel-app']
+    env:
+      - 'CLOUDSDK_CORE_PROJECT=laravelproject-390508'
+
+
+steps:
+  # Install zip and unzip
+  - name: 'gcr.io/cloud-builders/apt'
+    args: ['update']
+  - name: 'gcr.io/cloud-builders/apt'
+    args: ['install', '-y', 'zip', 'unzip']
+steps:
+  # Install Git
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+          apt-get update && apt-get install -y git
