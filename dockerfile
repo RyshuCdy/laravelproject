@@ -30,5 +30,5 @@ RUN a2enmod rewrite
 # Expose port 80 for the Apache server
 EXPOSE 80
 
-# Start the Apache server
+# Start the Apache serve
 CMD ["apache2-foreground"]
